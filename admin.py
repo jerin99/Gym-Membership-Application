@@ -45,6 +45,15 @@ class Admin(Database):
         else:
             print('Please enter contact in correct format!')
 
+    
+    def view_all_users(self):
+        user_list = Database.view_all_users()
+        table = PrettyTable()
+        table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+        for i in range(len(user_list)):
+            table.add_row(user_list[i])
+        print(table)
+
 
     def update_user(self):
         phoneRegex = '[0-9]{10}'

@@ -52,12 +52,13 @@ class Gym(Admin, User):
                         print('** | 1.| Admin Login                 **')
                         print('** | 2.| Create User                 **') 
                         print('** | 3.| View User                   **')
-                        print('** | 4.| Update User                 **')
-                        print('** | 5.| Delete User                 **')
-                        print('** | 6.| View Regimen                **')
-                        print('** | 7.| Create Regimen              **')
-                        print('** | 8.| Delete Regimen              **')
-                        print('** | 9.| Logout                      **')
+                        print('** | 4.| View All User               **')
+                        print('** | 5.| Update User                 **')
+                        print('** | 6.| Delete User                 **')
+                        print('** | 7.| View Regimen                **')
+                        print('** | 8.| Create Regimen              **')
+                        print('** | 9.| Delete Regimen              **')
+                        print('** | 10.| Logout                      **')
                         print('***************************************')
                         req = int(input('Enter input : '))
                         
@@ -68,14 +69,14 @@ class Gym(Admin, User):
                         elif req==3:
                             admin.view_user()
                         elif req==4:
-                            admin.update_user()
+                            admin.view_all_users()
                         elif req==5:
-                            admin.delete_user()
+                            admin.update_user()
                         elif req==6:
-                            admin.add_books()
+                            admin.delete_user()
                         elif req==7:
                             admin.view_regimen()
-                        elif req==8:
+                        elif req==7:
                             admin.create_regimen()
                         elif req==9:
                             admin.delete_regimen()

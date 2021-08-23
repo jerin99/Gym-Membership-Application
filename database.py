@@ -134,6 +134,19 @@ class Database:
         else:
             print('User doesnt exist!')
         conn.close()
+    
+    def view_all_users():
+        conn = sq.connect('gym_database.db')
+        sql = 'select * from USERS'
+        result = conn.execute(sql)
+        user_list = []
+        for i in result:
+            temp_list = []
+            for j in range(1, 10):
+                temp_list.append(i[j])
+            user_list.append(temp_list)
+        conn.close()
+        return user_list
         
     
 
