@@ -29,9 +29,9 @@ class Database:
     def view_user(contact):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where contact=?", (contact,))
         for row in query:
-            cursor.execute("select name from USERS where contact=?", (contact,))
+            cursor.execute("select contact from USERS where contact=?", (contact,))
             data = cursor.fetchall()
             if len(data)!=0:
                 user_list = []
@@ -48,7 +48,7 @@ class Database:
     def update_user(contact, field1, field2=0):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where contact=?", (contact,))
         for row in query:
             cursor.execute("select name from USERS where contact=?", (contact,))
             data = cursor.fetchall()
@@ -121,7 +121,7 @@ class Database:
     def delete_user(contact):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where contact=?", (contact,))
         for row in query:
             cursor.execute("select name from USERS where contact=?", (contact,))
             data = cursor.fetchall()
@@ -180,7 +180,7 @@ class Database:
     def delete_regimen(id):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from REGIMEN")
+        query = conn.execute("SELECT * from REGIMEN where id=?", (id,))
         for row in query:
             cursor.execute("select id from REGIMEN where id=?", (id,))
             data = cursor.fetchall()
@@ -200,7 +200,7 @@ class Database:
     def user_login(username, password):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where email=? and contact=?", (username,password))
         for row in query:
             cursor.execute("select name from USERS where email=? and contact=?", (username,password))
             data = cursor.fetchall()
@@ -216,13 +216,13 @@ class Database:
     def view_my_regimen(contact):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where contact=?", (contact,))
         for row in query:
             cursor.execute("select contact from USERS where contact=?", (contact,))
             data = cursor.fetchall()
             if len(data)!=0:
                 bmi = row[8]
-                regimen_query = conn.execute("SELECT * from REGIMEN")
+                regimen_query = conn.execute("SELECT * from REGIMEN where bmi_end<?", (bmi,))
                 for regimen_row in regimen_query:
                     cursor.execute("select * from REGIMEN where bmi_end<?", (bmi,))
                     data = cursor.fetchall()
@@ -236,7 +236,7 @@ class Database:
     def view_my_profile(contact):
         conn = sq.connect('gym_database.db')
         cursor = conn.cursor()
-        query = conn.execute("SELECT * from USERS")
+        query = conn.execute("SELECT * from USERS where contact=?", (contact,))
         for row in query:
             cursor.execute("select name from USERS where contact=?", (contact,))
             data = cursor.fetchall()
