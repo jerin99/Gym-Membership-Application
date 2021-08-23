@@ -39,6 +39,13 @@ class User(Database):
         else:
             print('You must login first to view your regimen!')
 
-a = User()
-a.login()
-a.view_my_regimen()
+    def view_my_profile(self):
+        if self.SESSION:
+            data = Database.view_my_profile(self.CONTACT)
+            table = PrettyTable()
+            table.field_names =  ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+            if data:
+                table.add_row(data)
+                print(table)       
+        else:
+            print('You must login first to view your profile!')

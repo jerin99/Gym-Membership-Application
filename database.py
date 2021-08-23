@@ -232,3 +232,17 @@ class Database:
                     return regimen_list
                     break
         conn.close()
+
+    def view_my_profile(contact):
+        conn = sq.connect('gym_database.db')
+        cursor = conn.cursor()
+        query = conn.execute("SELECT * from USERS")
+        for row in query:
+            cursor.execute("select name from USERS where contact=?", (contact,))
+            data = cursor.fetchall()
+            if len(data)!=0:
+                user_list = []
+                for i in range(1,10):
+                    user_list.append(row[i])
+                return user_list
+        conn.close()

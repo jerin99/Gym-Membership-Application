@@ -153,7 +153,3 @@ class Admin(Database):
             print('You have logged out successfully from Canon\'s Admin Panel')
         else:
             print('You are not logged in!')
-
-a = Admin()
-a.delete_regimen()
-
