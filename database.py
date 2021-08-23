@@ -33,13 +33,14 @@ class Database:
         for row in query:
             cursor.execute("select name from USERS where contact=?", (contact,))
             data = cursor.fetchall()
-            if len(data)==0:
-                print('User doesnt exist!')
-            else:
+            if len(data)!=0:
                 user_list = []
                 for i in range(1,10):
                     user_list.append(row[i])
                 return user_list
+                
+        else:
+            print('User doesnt exist!')
         conn.close()
 
 
@@ -51,9 +52,7 @@ class Database:
         for row in query:
             cursor.execute("select name from USERS where contact=?", (contact,))
             data = cursor.fetchall()
-            if len(data)==0:
-                print('User doesnt exist!')
-            else:
+            if len(data)!=0:
                 if field2==0:
                     if field1=='name':
                         new_value = input('Enter new value : ')
@@ -113,5 +112,123 @@ class Database:
                     return 0
                     # except:
                     #     print('Please enter values in correct format!')
+                
+        else:
+            print('User doesnt exist!')
+        conn.close()
 
+
+    def delete_user(contact):
+        conn = sq.connect('gym_database.db')
+        cursor = conn.cursor()
+        query = conn.execute("SELECT * from USERS")
+        for row in query:
+            cursor.execute("select name from USERS where contact=?", (contact,))
+            data = cursor.fetchall()
+            if len(data)!=0:
+                sql = "delete from USERS where contact=?"
+                conn.execute(sql, (contact,))
+                conn.commit()
+                return 'User successfully deleted'
+                
+        else:
+            print('User doesnt exist!')
+        conn.close()
+        
+    
+
+    def create_regimen(regimen_list, start_bmi, end_bmi):
+        sun = regimen_list[0]
+        mon = regimen_list[1]
+        tue = regimen_list[2]
+        wed = regimen_list[3]
+        thu = regimen_list[4]
+        fri = regimen_list[5]
+        sat = regimen_list[6]
+
+        conn = sq.connect('gym_database.db')
+        try:
+            sql = "INSERT INTO REGIMEN VALUES(?,?,?,?,?,?,?,?,?,?)"
+            values = (None, sun, mon, tue, wed, thu, fri, sat, start_bmi, end_bmi)
+            conn.execute(sql, values)
+            conn.commit()
+            conn.close()
+            print('Regimen has been successfully added')
+            return 0
+        except:
+            sql = "update REGIMEN set sun=?, mon=?, tue=?, wed=?, thu=?, fri=?, sat=?"
+            conn.execute(sql, (sun, mon, tue, wed, thu, fri, sat))
+            conn.commit()
+            print('Regimen has been updated successfully')
+            return 0
+
+
+    def view_regimen():
+        conn = sq.connect('gym_database.db')
+        sql = 'select * from REGIMEN'
+        result = conn.execute(sql)
+        regimen_list = []
+        for i in result:
+            temp_list = []
+            for j in range(1, 10):
+                temp_list.append(i[j])
+            regimen_list.append(temp_list)
+        conn.close()
+        return regimen_list
+
+
+    def delete_regimen(id):
+        conn = sq.connect('gym_database.db')
+        cursor = conn.cursor()
+        query = conn.execute("SELECT * from REGIMEN")
+        for row in query:
+            cursor.execute("select id from REGIMEN where id=?", (id,))
+            data = cursor.fetchall()
+            if len(data)!=0:
+                sql = "delete from REGIMEN where id=?"
+                conn.execute(sql, (id,))
+                conn.commit()
+                print('Regimen has been successfully deleted')
+                return 0
+                
+        else:
+            print('Regimen doesnt exist with this ID!')
+        conn.close()
+
+# ****************************************************************USERS***************************************************8
+
+    def user_login(username, password):
+        conn = sq.connect('gym_database.db')
+        cursor = conn.cursor()
+        query = conn.execute("SELECT * from USERS")
+        for row in query:
+            cursor.execute("select name from USERS where email=? and contact=?", (username,password))
+            data = cursor.fetchall()
+            if len(data)!=0:
+                membership = row[9]
+                return membership
+                
+        else:
+            print('User doesnt exist!')
+                
+        conn.close()
+        
+    def view_my_regimen(contact):
+        conn = sq.connect('gym_database.db')
+        cursor = conn.cursor()
+        query = conn.execute("SELECT * from USERS")
+        for row in query:
+            cursor.execute("select contact from USERS where contact=?", (contact,))
+            data = cursor.fetchall()
+            if len(data)!=0:
+                bmi = row[8]
+                regimen_query = conn.execute("SELECT * from REGIMEN")
+                for regimen_row in regimen_query:
+                    cursor.execute("select * from REGIMEN where bmi_end<?", (bmi,))
+                    data = cursor.fetchall()
+                    regimen_list = []
+                    for i in range(1,10):
+                        regimen_list.append(regimen_row[i])
+                    return regimen_list
+                    break
         conn.close()

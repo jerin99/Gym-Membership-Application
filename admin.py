@@ -9,6 +9,43 @@ class Admin(Database):
     #Admins can do their operations only if this session is true
     SESSION = False
 
+    def delete_regimen(self):
+        id = int(input('Enter the id of the regimen : '))
+        regimen = Database.delete_regimen(id)
+        if regimen:
+            self.view_regimen()
+
+    def create_regimen(self):
+        regimen_list = []
+        weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        print('Please note that start and end BMI\'s are unique')
+        start_bmi = float(input('Enter start range of bmi : '))
+        end_bmi = float(input('Enter end range of bmi : '))
+        for i in range(len(weekdays)):
+            day = input('Enter for {} : '.format(weekdays[i]))
+            regimen_list.append(day)
+        regimen = Database.create_regimen(regimen_list, start_bmi, end_bmi)
+        if regimen:
+            self.view_regimen()
+
+    def view_regimen(self):
+        regimen_list = Database.view_regimen()
+        table = PrettyTable()
+        table.field_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'BMI Start', 'BMI End']
+        for i in range(len(regimen_list)):
+            table.add_row(regimen_list[i])
+        print(table)
+
+
+    def delete_user(self):
+        phoneRegex = '[0-9]{10}'
+        contact = input('Enter contact number to update : ')
+        if bool(re.search(phoneRegex, contact)):
+            print(Database.delete_user(contact))
+        else:
+            print('Please enter contact in correct format!')
+
+
     def update_user(self):
         phoneRegex = '[0-9]{10}'
         contact = input('Enter contact number to update : ')
@@ -39,13 +76,6 @@ class Admin(Database):
             if user_list==0:
                 self.view_user(contact)
         
-            # user_list = Database.update_user(contact)
-            # table = PrettyTable()
-            # table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
-            # if user_list:
-            #     table.add_row(user_list)
-            #     print(table)
-                
         else:
             print('Please enter contact in correct format!')
 
@@ -125,4 +155,5 @@ class Admin(Database):
             print('You are not logged in!')
 
 a = Admin()
-a.update_user()
+a.delete_regimen()
+
