@@ -1,14 +1,7 @@
 import sqlite3 as sq
-from typing import NewType
 import re
 
 class Database:
-
-    USER_ID = 100
-
-    #All the user details are stored here
-    #Structure[id, Name, Email, Weight, Height]
-    USERS = []
 
     def insert_user(name, email, gender, contact, height, weight, age, membership):
         bmi = (weight/(height*height)*10000)
@@ -81,14 +74,14 @@ class Database:
                         print('Gender has been updated successfully')
                         return 0
                     elif field1=='age':
-                        new_value = input('Enter new value : ')
+                        new_value = int(input('Enter new value : '))
                         sql = "update USERS set age=?"
                         conn.execute(sql, (new_value,))
                         conn.commit()
                         print('Age has been updated successfully')
                         return 0
                     elif field1=='membership':
-                        new_value = input('Enter new value : ')
+                        new_value = int(input('Enter new value : '))
                         dur = [1,3,6,12]
                         if new_value in dur:
                             sql = "update USERS set membership=?"
@@ -99,19 +92,19 @@ class Database:
                         else:
                             print('You can only shoose from 1, 3, 6 or 12 month plan!')
                 else:
-                    # try:
-                    bmi = 0
-                    height = float(input('Enter height : '))
-                    weight = float(input('Enter weight : '))
-                    bmi = (weight/(height*height)*10000)
-                    bmi = round(bmi,1)
-                    sql = "update USERS set height=?, weight=?, bmi=?"
-                    conn.execute(sql, (height, weight, bmi))
-                    conn.commit()
-                    print('Height, Weight and BMI updated successfully')
-                    return 0
-                    # except:
-                    #     print('Please enter values in correct format!')
+                    try:
+                        bmi = 0
+                        height = float(input('Enter height : '))
+                        weight = float(input('Enter weight : '))
+                        bmi = (weight/(height*height)*10000)
+                        bmi = round(bmi,1)
+                        sql = "update USERS set height=?, weight=?, bmi=?"
+                        conn.execute(sql, (height, weight, bmi))
+                        conn.commit()
+                        print('Height, Weight and BMI updated successfully')
+                        return 0
+                    except:
+                        print('Please enter values in correct format!')
                 
         else:
             print('User doesnt exist!')
@@ -169,8 +162,8 @@ class Database:
             print('Regimen has been successfully added')
             return 0
         except:
-            sql = "update REGIMEN set sun=?, mon=?, tue=?, wed=?, thu=?, fri=?, sat=?"
-            conn.execute(sql, (sun, mon, tue, wed, thu, fri, sat))
+            sql = "update REGIMEN set sun=?, mon=?, tue=?, wed=?, thu=?, fri=?, sat=? where bmi_start=? and bmi_end=?"
+            conn.execute(sql, (sun, mon, tue, wed, thu, fri, sat, start_bmi, end_bmi))
             conn.commit()
             print('Regimen has been updated successfully')
             return 0

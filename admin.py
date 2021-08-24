@@ -5,138 +5,163 @@ import re
 
 class Admin(Database):
 
-    admin = [{'Username':'admin', 'Password':'Password'}]
+    admin = [{'Username':'admin', 'Password':'Password'}, {'Username':'Admin', 'Password':'Admin'}]
     #Admins can do their operations only if this session is true
     SESSION = False
 
+    
     def delete_regimen(self):
-        id = int(input('Enter the id of the regimen : '))
-        regimen = Database.delete_regimen(id)
-        if regimen:
-            self.view_regimen()
+        if Admin.SESSION:
+            id = int(input('Enter the id of the regimen : '))
+            regimen = Database.delete_regimen(id)
+            if regimen:
+                self.view_regimen()
+        else:
+            print('Please login to delete regimens!')
 
     def create_regimen(self):
-        regimen_list = []
-        weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-        print('Please note that start and end BMI\'s are unique')
-        start_bmi = float(input('Enter start range of bmi : '))
-        end_bmi = float(input('Enter end range of bmi : '))
-        for i in range(len(weekdays)):
-            day = input('Enter for {} : '.format(weekdays[i]))
-            regimen_list.append(day)
-        regimen = Database.create_regimen(regimen_list, start_bmi, end_bmi)
-        if regimen:
-            self.view_regimen()
+        if Admin.SESSION:
+            regimen_list = []
+            weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            print('Please note that start and end BMI\'s are unique')
+            start_bmi = float(input('Enter start range of bmi : '))
+            end_bmi = float(input('Enter end range of bmi : '))
+            for i in range(len(weekdays)):
+                day = input('Enter for {} : '.format(weekdays[i]))
+                regimen_list.append(day)
+            regimen = Database.create_regimen(regimen_list, start_bmi, end_bmi)
+            if regimen:
+                self.view_regimen()
+        else:
+            print('Please login to create new regimens!')
 
     def view_regimen(self):
-        regimen_list = Database.view_regimen()
-        table = PrettyTable()
-        table.field_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'BMI Start', 'BMI End']
-        for i in range(len(regimen_list)):
-            table.add_row(regimen_list[i])
-        print(table)
+        if Admin.SESSION:
+            regimen_list = Database.view_regimen()
+            table = PrettyTable()
+            table.field_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'BMI Start', 'BMI End']
+            for i in range(len(regimen_list)):
+                table.add_row(regimen_list[i])
+            print(table)
+        else:
+            print('Please login to view regimens!')
 
 
     def delete_user(self):
-        phoneRegex = '[0-9]{10}'
-        contact = input('Enter contact number to update : ')
-        if bool(re.search(phoneRegex, contact)):
-            print(Database.delete_user(contact))
+        if Admin.SESSION:
+            phoneRegex = '[0-9]{10}'
+            contact = input('Enter contact number to update : ')
+            if bool(re.search(phoneRegex, contact)):
+                print(Database.delete_user(contact))
+            else:
+                print('Please enter contact in correct format!')
         else:
-            print('Please enter contact in correct format!')
+            print('Please login to delete users!')
 
     
     def view_all_users(self):
-        user_list = Database.view_all_users()
-        table = PrettyTable()
-        table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
-        for i in range(len(user_list)):
-            table.add_row(user_list[i])
-        print(table)
+        if Admin.SESSION:
+            user_list = Database.view_all_users()
+            table = PrettyTable()
+            table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+            for i in range(len(user_list)):
+                table.add_row(user_list[i])
+            print(table)
+        else:
+            print('Please login to view all users!')
 
 
     def update_user(self):
-        phoneRegex = '[0-9]{10}'
-        contact = input('Enter contact number to update : ')
-        if bool(re.search(phoneRegex, contact)):
-            print('1. Name')
-            print('2. Email')
-            print('3. Gender')
-            print('4. Height and Weight')
-            print('5. Age')
-            print('6. Membership')
-            fields = ['name', 'email', 'gender', 'height', 'weight', 'age', 'membership']
-            field = int(input('Choose the correct field : '))
-            if field==1:
-                user_list = Database.update_user(contact, fields[0])
-            elif field==2:
-                user_list = Database.update_user(contact, fields[1])
-            elif field==3:
-                user_list = Database.update_user(contact, fields[2])
-            elif field==4:
-                user_list = Database.update_user(contact, fields[3], fields[4])
-            elif field==5:
-                user_list = Database.update_user(contact, fields[5])
-            elif field==6:
-                user_list = Database.update_user(contact, fields[6])
-            else:
-                print('Invalid option!')
+        if Admin.SESSION:
+            phoneRegex = '[0-9]{10}'
+            contact = input('Enter contact number to update : ')
+            if bool(re.search(phoneRegex, contact)):
+                print('1. Name')
+                print('2. Email')
+                print('3. Gender')
+                print('4. Height and Weight')
+                print('5. Age')
+                print('6. Membership')
+                fields = ['name', 'email', 'gender', 'height', 'weight', 'age', 'membership']
+                field = int(input('Choose the correct field : '))
+                if field==1:
+                    user_list = Database.update_user(contact, fields[0])
+                elif field==2:
+                    user_list = Database.update_user(contact, fields[1])
+                elif field==3:
+                    user_list = Database.update_user(contact, fields[2])
+                elif field==4:
+                    user_list = Database.update_user(contact, fields[3], fields[4])
+                elif field==5:
+                    user_list = Database.update_user(contact, fields[5])
+                elif field==6:
+                    user_list = Database.update_user(contact, fields[6])
+                else:
+                    print('Invalid option!')
 
-            if user_list==0:
-                self.view_user(contact)
-        
+                if user_list==0:
+                    self.view_user(contact)
+            
+            else:
+                print('Please enter contact in correct format!')
         else:
-            print('Please enter contact in correct format!')
+            print('Please login to update users!')
 
     def view_user(self, contact=0):
-        phoneRegex = '[0-9]{10}'
-        if contact==0:
-            contact = input('Enter contact number : ')
-            if bool(re.search(phoneRegex, contact)):
-                user_list = Database.view_user(contact)
-                table = PrettyTable()
-                table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
-                if user_list:
-                    table.add_row(user_list)
-                    print(table)
+        if Admin.SESSION:
+            phoneRegex = '[0-9]{10}'
+            if contact==0:
+                contact = input('Enter contact number : ')
+                if bool(re.search(phoneRegex, contact)):
+                    user_list = Database.view_user(contact)
+                    table = PrettyTable()
+                    table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+                    if user_list:
+                        table.add_row(user_list)
+                        print(table)
+                else:
+                    print('Please enter contact in correct format!')
             else:
-                print('Please enter contact in correct format!')
+                if bool(re.search(phoneRegex, contact)):
+                    user_list = Database.view_user(contact)
+                    table = PrettyTable()
+                    table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+                    if user_list:
+                        table.add_row(user_list)
+                        print(table)                
+                else:
+                    print('Please enter contact in correct format!')
         else:
-            if bool(re.search(phoneRegex, contact)):
-                user_list = Database.view_user(contact)
-                table = PrettyTable()
-                table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
-                if user_list:
-                    table.add_row(user_list)
-                    print(table)                
-            else:
-                print('Please enter contact in correct format!')
+            print('Please login to view user!')
 
     def create_user(self):
-        emailRegex = '^[A-Za-z0-9.+=]+@[a-z]+\.com'
-        phoneregex = '[0-9]{10}'
-        name = input('Enter name : ')
-        email = input('Enter email : ')
-        if bool(re.search(emailRegex, email)):
-            contact = input('Enter contact number : ')
-            if bool(re.search(phoneregex, contact)):
-                # try:
-                gender = input('Enter gender : ')
-                age = int(input('Enter age : '))
-                height = float(input('Enter height (in CM) : '))
-                weight = float(input('Enter weight (in KG) : '))
-                duration = int(input('Enter duration (1,3,6 or 12 months) : '))
-                dur = [1,3,6,12]
-                if duration in dur:
-                    print(Database.insert_user(name, email, gender, contact, height, weight, age, duration))
+        if Admin.SESSION:
+            emailRegex = '^[A-Za-z0-9.+=]+@[a-z]+\.com'
+            phoneregex = '[0-9]{10}'
+            name = input('Enter name : ')
+            email = input('Enter email : ')
+            if bool(re.search(emailRegex, email)):
+                contact = input('Enter contact number : ')
+                if bool(re.search(phoneregex, contact)):
+                    try:
+                        gender = input('Enter gender : ')
+                        age = int(input('Enter age : '))
+                        height = float(input('Enter height (in CM) : '))
+                        weight = float(input('Enter weight (in KG) : '))
+                        duration = int(input('Enter duration (1,3,6 or 12 months) : '))
+                        dur = [1,3,6,12]
+                        if duration in dur:
+                            print(Database.insert_user(name, email, gender, contact, height, weight, age, duration))
+                        else:
+                            print('Please enter duration only in selected format!')
+                    except:
+                        print('Invalid details entered')
                 else:
-                    print('Please enter duration only in selected format!')
-                # except:
-                #     print('Invalid details entered')
+                    print('Please check the contact number!')
             else:
-                print('Please check the contact number!')
+                print('You have entered mail in wrong format')
         else:
-            print('You have entered mail in wrong format')
+            print('Please login to create new users!')
         
 
     #This class method is used for admin to log into the system

@@ -56,9 +56,9 @@ class Gym(Admin, User):
                         print('** | 5.| Update User                 **')
                         print('** | 6.| Delete User                 **')
                         print('** | 7.| View Regimen                **')
-                        print('** | 8.| Create Regimen              **')
+                        print('** | 8.| Create/Update Regimen       **')
                         print('** | 9.| Delete Regimen              **')
-                        print('** | 10.| Logout                      **')
+                        print('** | 10.| Logout                     **')
                         print('***************************************')
                         req = int(input('Enter input : '))
                         
@@ -76,7 +76,7 @@ class Gym(Admin, User):
                             admin.delete_user()
                         elif req==7:
                             admin.view_regimen()
-                        elif req==7:
+                        elif req==8:
                             admin.create_regimen()
                         elif req==9:
                             admin.delete_regimen()
