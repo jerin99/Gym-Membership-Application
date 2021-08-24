@@ -49,8 +49,8 @@ class Database:
                 if field2==0:
                     if field1=='name':
                         new_value = input('Enter new value : ')
-                        sql = "update USERS set name=?"
-                        conn.execute(sql, (new_value,))
+                        sql = "update USERS set name=? where contact=?"
+                        conn.execute(sql, (new_value,contact))
                         conn.commit()
                         print('Name has been updated successfully')
                         return 0
@@ -59,8 +59,8 @@ class Database:
                         new_value = input('Enter new value : ')
 
                         if bool(re.search(emailRegex, new_value)):
-                            sql = "update USERS set email=?"
-                            conn.execute(sql, (new_value,))
+                            sql = "update USERS set email=? where contact=?"
+                            conn.execute(sql, (new_value,contact))
                             conn.commit()
                             print('Email has been updated successfully')
                             return 0
@@ -68,24 +68,24 @@ class Database:
                             print('Please enter mail in correct format!')
                     elif field1=='gender':
                         new_value = input('Enter new value : ')
-                        sql = "update USERS set gender=?"
-                        conn.execute(sql, (new_value,))
+                        sql = "update USERS set gender=? where contact=?"
+                        conn.execute(sql, (new_value,contact))
                         conn.commit()
                         print('Gender has been updated successfully')
                         return 0
                     elif field1=='age':
                         new_value = int(input('Enter new value : '))
-                        sql = "update USERS set age=?"
-                        conn.execute(sql, (new_value,))
+                        sql = "update USERS set age=? where contact=?"
+                        conn.execute(sql, (new_value,contact))
                         conn.commit()
                         print('Age has been updated successfully')
                         return 0
                     elif field1=='membership':
                         new_value = int(input('Enter new value : '))
-                        dur = [1,3,6,12]
+                        dur = [0,1,3,6,12]
                         if new_value in dur:
-                            sql = "update USERS set membership=?"
-                            conn.execute(sql, (new_value,))
+                            sql = "update USERS set membership=? where contact=?"
+                            conn.execute(sql, (new_value,contact))
                             conn.commit()
                             print('Membership has been updated successfully')
                             return 0
@@ -98,8 +98,8 @@ class Database:
                         weight = float(input('Enter weight : '))
                         bmi = (weight/(height*height)*10000)
                         bmi = round(bmi,1)
-                        sql = "update USERS set height=?, weight=?, bmi=?"
-                        conn.execute(sql, (height, weight, bmi))
+                        sql = "update USERS set height=?, weight=?, bmi=? where contact=?"
+                        conn.execute(sql, (height, weight, bmi, contact))
                         conn.commit()
                         print('Height, Weight and BMI updated successfully')
                         return 0
@@ -176,7 +176,7 @@ class Database:
         regimen_list = []
         for i in result:
             temp_list = []
-            for j in range(1, 10):
+            for j in range(0, 10):
                 temp_list.append(i[j])
             regimen_list.append(temp_list)
         conn.close()
@@ -209,10 +209,14 @@ class Database:
         query = conn.execute("SELECT * from USERS where email=? and contact=?", (username,password))
         for row in query:
             cursor.execute("select name from USERS where email=? and contact=?", (username,password))
-            data = cursor.fetchall()
-            if len(data)!=0:
-                membership = row[9]
-                return membership
+            membership = row[9]
+            if membership>0:
+                data = cursor.fetchall()
+                if len(data)!=0:
+                    membership = row[9]
+                    return membership
+            else:
+                print('Your access has been revoked by admin!')
                 
         else:
             print('User doesnt exist!')

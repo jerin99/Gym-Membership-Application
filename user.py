@@ -20,8 +20,8 @@ class User(Database):
                     self.SESSION=True
                     self.CONTACT = password
                     print('Welcome to Canon Gym')
-            else:
-                print('Please register from admin to continue')
+                else:
+                    print('Please register from admin to continue')
         else:
             print('Invalid email!')
 

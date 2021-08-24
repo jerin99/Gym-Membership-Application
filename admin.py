@@ -39,7 +39,7 @@ class Admin(Database):
         if Admin.SESSION:
             regimen_list = Database.view_regimen()
             table = PrettyTable()
-            table.field_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'BMI Start', 'BMI End']
+            table.field_names = ['ID', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'BMI Start', 'BMI End']
             for i in range(len(regimen_list)):
                 table.add_row(regimen_list[i])
             print(table)
@@ -63,7 +63,7 @@ class Admin(Database):
         if Admin.SESSION:
             user_list = Database.view_all_users()
             table = PrettyTable()
-            table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Wight', 'Age', 'BMI', 'Membership']
+            table.field_names = ['Name', 'Email', 'Gender', 'Contact', 'Height', 'Weight', 'Age', 'BMI', 'Membership']
             for i in range(len(user_list)):
                 table.add_row(user_list[i])
             print(table)
